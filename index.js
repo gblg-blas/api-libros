@@ -41,15 +41,21 @@ const initDb = async () => {
     // Insertar el listado de libros de prueba
     await pool.query(`
       INSERT INTO libros (titulo, autor, anio) VALUES 
+      ('Cien años de soledad', 'Gabriel García Márquez', 1967),
+      ('Don Quijote de la Mancha', 'Miguel de Cervantes', 1605),
+      ('El Principito', 'Antoine de Saint-Exupéry', 1943),
+      ('1984', 'George Orwell', 1949),
       ('Crimen y castigo', 'Fiódor Dostoyevski', 1866),
+      ('Orgullo y prejuicio', 'Jane Austen', 1813),
       ('La Odisea', 'Homero', -800),
       ('Ficciones', 'Jorge Luis Borges', 1944),
       ('Pedro Páramo', 'Juan Rulfo', 1955),
       ('La sombra del viento', 'Carlos Ruiz Zafón', 2001),
+      ('Rayuela', 'Julio Cortázar', 1963),
       ('Los juegos del hambre', 'Suzanne Collins', 2008);
     `);
 
-    console.log('Tabla libros recreada e insertados 6 registros de prueba.');
+    console.log('Tabla libros recreada e insertados 12 registros de prueba.');
   } catch (err) {
     console.error('Error al inicializar la base de datos:', err);
   }
