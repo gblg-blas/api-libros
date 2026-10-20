@@ -49,7 +49,7 @@ const initDb = async () => {
       ('Los juegos del hambre', 'Suzanne Collins', 2008);
     `);
 
-    console.log('Tabla libros recreada e insertados 12 registros de prueba.');
+    console.log('Tabla libros recreada e insertados 6 registros de prueba.');
   } catch (err) {
     console.error('Error al inicializar la base de datos:', err);
   }
