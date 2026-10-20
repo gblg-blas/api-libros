@@ -21,7 +21,7 @@ const pool = new Pool(
       }
 );
 
-// Inicializar la tabla e insertar datos de prueba si está vacía
+// Inicializar la tabla e insertar 10+ datos de prueba si está vacía
 const initDb = async () => {
   try {
     await pool.query(`
@@ -40,9 +40,19 @@ const initDb = async () => {
       await pool.query(`
         INSERT INTO libros (titulo, autor, anio) VALUES 
         ('Cien años de soledad', 'Gabriel García Márquez', 1967),
-        ('Don Quijote de la Mancha', 'Miguel de Cervantes', 1605);
+        ('Don Quijote de la Mancha', 'Miguel de Cervantes', 1605),
+        ('El Principito', 'Antoine de Saint-Exupéry', 1943),
+        ('1984', 'George Orwell', 1949),
+        ('Crimen y castigo', 'Fiódor Dostoyevski', 1866),
+        ('Orgullo y prejuicio', 'Jane Austen', 1813),
+        ('La Odisea', 'Homero', -800),
+        ('Ficciones', 'Jorge Luis Borges', 1944),
+        ('Pedro Páramo', 'Juan Rulfo', 1955),
+        ('La sombra del viento', 'Carlos Ruiz Zafón', 2001),
+        ('Rayuela', 'Julio Cortázar', 1963),
+        ('Los juegos del hambre', 'Suzanne Collins', 2008);
       `);
-      console.log('Datos de prueba insertados en la tabla libros.');
+      console.log('12 libros de prueba insertados en la tabla.');
     }
 
     console.log('Base de datos inicializada correctamente.');
@@ -70,7 +80,7 @@ app.get('/libros', async (req, res) => {
   }
 });
 
-// 2. OBTENER un libro por ID (GET /libros/:id) - Formato de objeto único en "data"
+// 2. OBTENER un libro por ID (GET /libros/:id)
 app.get('/libros/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -86,7 +96,7 @@ app.get('/libros/:id', async (req, res) => {
   }
 });
 
-// 3. CREAR un libro (POST) - Responde envuelto en "data"
+// 3. CREAR un libro (POST)
 app.post('/libros', async (req, res) => {
   const { titulo, autor, anio } = req.body;
   try {
