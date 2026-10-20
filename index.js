@@ -21,15 +21,11 @@ const pool = new Pool(
       }
 );
 
-// Recrear la tabla e insertar los libros de prueba
+// Inicializar la tabla de libros de forma segura
 const initDb = async () => {
   try {
-    // Borrar la tabla previa si existe para forzar la recarga de datos
-    await pool.query(`DROP TABLE IF EXISTS libros;`);
-
-    // Crear la tabla desde cero
     await pool.query(`
-      CREATE TABLE libros (
+      CREATE TABLE IF NOT EXISTS libros (
         id SERIAL PRIMARY KEY,
         titulo VARCHAR(150) NOT NULL,
         autor VARCHAR(100) NOT NULL,
@@ -37,25 +33,7 @@ const initDb = async () => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-
-    // Insertar el listado de libros de prueba
-    await pool.query(`
-      INSERT INTO libros (titulo, autor, anio) VALUES 
-      ('Cien años de soledad', 'Gabriel García Márquez', 1967),
-      ('Don Quijote de la Mancha', 'Miguel de Cervantes', 1605),
-      ('El Principito', 'Antoine de Saint-Exupéry', 1943),
-      ('1984', 'George Orwell', 1949),
-      ('Crimen y castigo', 'Fiódor Dostoyevski', 1866),
-      ('Orgullo y prejuicio', 'Jane Austen', 1813),
-      ('La Odisea', 'Homero', -800),
-      ('Ficciones', 'Jorge Luis Borges', 1944),
-      ('Pedro Páramo', 'Juan Rulfo', 1955),
-      ('La sombra del viento', 'Carlos Ruiz Zafón', 2001),
-      ('Rayuela', 'Julio Cortázar', 1963),
-      ('Los juegos del hambre', 'Suzanne Collins', 2008);
-    `);
-
-    console.log('Tabla libros recreada e insertados 12 registros de prueba.');
+    console.log('Base de datos inicializada correctamente (tabla libros verificada).');
   } catch (err) {
     console.error('Error al inicializar la base de datos:', err);
   }
@@ -68,7 +46,7 @@ app.get('/', (req, res) => {
   res.json({ mensaje: 'API de Libros funcionando correctamente 📚' });
 });
 
-// 1. OBTENER todos los libros (GET) - Estructurado con "data"
+// 1. OBTENER todos los libros (GET /libros) - Estructurado con "data"
 app.get('/libros', async (req, res) => {
   try {
     const resultado = await pool.query('SELECT * FROM libros ORDER BY id ASC');
@@ -96,7 +74,7 @@ app.get('/libros/:id', async (req, res) => {
   }
 });
 
-// 3. CREAR un libro (POST)
+// 3. CREAR un libro (POST /libros)
 app.post('/libros', async (req, res) => {
   const { titulo, autor, anio } = req.body;
   try {
