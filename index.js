@@ -21,11 +21,15 @@ const pool = new Pool(
       }
 );
 
-// Inicializar la tabla e insertar 10+ datos de prueba si está vacía
+// Recrear la tabla e insertar los libros de prueba
 const initDb = async () => {
   try {
+    // Borrar la tabla previa si existe para forzar la recarga de datos
+    await pool.query(`DROP TABLE IF EXISTS libros;`);
+
+    // Crear la tabla desde cero
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS libros (
+      CREATE TABLE libros (
         id SERIAL PRIMARY KEY,
         titulo VARCHAR(150) NOT NULL,
         autor VARCHAR(100) NOT NULL,
@@ -34,28 +38,24 @@ const initDb = async () => {
       );
     `);
 
-    // Verificar si hay registros
-    const check = await pool.query('SELECT COUNT(*) FROM libros');
-    if (parseInt(check.rows[0].count) === 0) {
-      await pool.query(`
-        INSERT INTO libros (titulo, autor, anio) VALUES 
-        ('Cien años de soledad', 'Gabriel García Márquez', 1967),
-        ('Don Quijote de la Mancha', 'Miguel de Cervantes', 1605),
-        ('El Principito', 'Antoine de Saint-Exupéry', 1943),
-        ('1984', 'George Orwell', 1949),
-        ('Crimen y castigo', 'Fiódor Dostoyevski', 1866),
-        ('Orgullo y prejuicio', 'Jane Austen', 1813),
-        ('La Odisea', 'Homero', -800),
-        ('Ficciones', 'Jorge Luis Borges', 1944),
-        ('Pedro Páramo', 'Juan Rulfo', 1955),
-        ('La sombra del viento', 'Carlos Ruiz Zafón', 2001),
-        ('Rayuela', 'Julio Cortázar', 1963),
-        ('Los juegos del hambre', 'Suzanne Collins', 2008);
-      `);
-      console.log('12 libros de prueba insertados en la tabla.');
-    }
+    // Insertar el listado de libros de prueba
+    await pool.query(`
+      INSERT INTO libros (titulo, autor, anio) VALUES 
+      ('Cien años de soledad', 'Gabriel García Márquez', 1967),
+      ('Don Quijote de la Mancha', 'Miguel de Cervantes', 1605),
+      ('El Principito', 'Antoine de Saint-Exupéry', 1943),
+      ('1984', 'George Orwell', 1949),
+      ('Crimen y castigo', 'Fiódor Dostoyevski', 1866),
+      ('Orgullo y prejuicio', 'Jane Austen', 1813),
+      ('La Odisea', 'Homero', -800),
+      ('Ficciones', 'Jorge Luis Borges', 1944),
+      ('Pedro Páramo', 'Juan Rulfo', 1955),
+      ('La sombra del viento', 'Carlos Ruiz Zafón', 2001),
+      ('Rayuela', 'Julio Cortázar', 1963),
+      ('Los juegos del hambre', 'Suzanne Collins', 2008);
+    `);
 
-    console.log('Base de datos inicializada correctamente.');
+    console.log('Tabla libros recreada e insertados 12 registros de prueba.');
   } catch (err) {
     console.error('Error al inicializar la base de datos:', err);
   }
